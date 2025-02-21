@@ -119,4 +119,32 @@ int exec_alias(char *alias, Alias_list *list){
     return SUCESSO;
 }
 
+int remove_alias(Alias_list *list, char *alias){
+    Alias_list *ptr = list;
+    Alias_list *prev = NULL;
+
+    while (ptr!= NULL)
+    {
+        if(strncmp(alias, ptr->alias.name, MAX_ALIAS_LENGTH) == 0)
+            break;
+
+        prev = ptr;
+        ptr = ptr->next;
+    }
+    
+
+    if(ptr == NULL)
+        return ERRO;
+
+    if(prev == NULL){
+        list = ptr->next;
+    } else {
+        prev->next = ptr->next;
+    }
+
+    free_alias(&ptr->alias);
+    free(ptr);
+    return SUCESSO;
+}
+
 
