@@ -7,7 +7,7 @@ void exibir_uso(const char *prog) {
     printf("Comandos:\n");
     printf("  add <alias> \"<comando>\"       - Adiciona um novo alias\n");
     printf("  list                          - Lista todos os aliases\n");
-    printf("  exec <alias>                  - Executa o comando associado ao alias\n");
+    printf("  run <alias>                   - Executa o comando associado ao alias\n");
     printf("  rm <alias>                    - Remove um alias\n");
 }
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]){
 
         list_alias(list, command_print);
 
-    } else if (strncmp(argv[1], "exec", 4) == 0 && argc == 3) {
+    } else if (strncmp(argv[1], "run", 3) == 0 && argc == 3) {
         exec_alias(argv[2], list);
 
     } else if (strncmp(argv[1], "rm", 2) == 0 && argc == 3) {
