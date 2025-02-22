@@ -68,7 +68,7 @@ Alias_list* load_alias_list() {
         new_node->alias = alias;
         new_node->next = list;
         list = new_node;
-        printf("LOAD ALIAS: %s\n", alias.name);
+        //printf("LOAD ALIAS: %s\n", alias.name);
     }
 
     fclose(file);
@@ -93,11 +93,11 @@ Alias_list* add_alias(Alias_list* list, Alias alias){
     return aux;
 }
 
-void list_alias(Alias_list* list){
+void list_alias(Alias_list* list, int command_print){
 
     if(list != NULL){
-        print_alias(list->alias);
-        list_alias(list->next);
+        print_alias(list->alias, command_print);
+        list_alias(list->next, command_print);
     }
 }
 
@@ -119,25 +119,24 @@ int exec_alias(char *alias, Alias_list *list){
     return SUCESSO;
 }
 
-int remove_alias(Alias_list *list, char *alias){
-    Alias_list *ptr = list;
+int remove_alias(Alias_list **list, char *alias) {
+    Alias_list *ptr = *list;
     Alias_list *prev = NULL;
 
-    while (ptr!= NULL)
-    {
-        if(strncmp(alias, ptr->alias.name, MAX_ALIAS_LENGTH) == 0)
+    while (ptr != NULL) {
+        if (strncmp(alias, ptr->alias.name, MAX_ALIAS_LENGTH) == 0)
             break;
 
         prev = ptr;
         ptr = ptr->next;
     }
-    
 
-    if(ptr == NULL)
+    if (ptr == NULL) // Alias não encontrado
         return ERRO;
 
-    if(prev == NULL){
-        list = ptr->next;
+    if (prev == NULL) {
+        // O alias a ser removido está no início da lista
+        *list = ptr->next;
     } else {
         prev->next = ptr->next;
     }
@@ -146,5 +145,6 @@ int remove_alias(Alias_list *list, char *alias){
     free(ptr);
     return SUCESSO;
 }
+
 
 
