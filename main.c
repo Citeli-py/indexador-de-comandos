@@ -23,25 +23,27 @@ int main(int argc, char *argv[]){
     // ./idx <comando> [alias] [comando]
     if (strncmp(argv[1], "add", 3) == 0) {
         Alias alias = create_alias(argv[2], argv[3]);
-        print_alias(alias);
-        printf("argc: %d\n", argc);
         list = add_alias(list, alias);
 
     } else if (strncmp(argv[1], "list", 4) == 0) {
-        list_alias(list);
+        int command_print = 0;
+        if( (argc>2) && (strncmp(argv[2], "-c", 2) == 0))
+            command_print = 1;
+
+        list_alias(list, command_print);
 
     } else if (strncmp(argv[1], "exec", 4) == 0 && argc == 3) {
         exec_alias(argv[2], list);
 
     } else if (strncmp(argv[1], "rm", 2) == 0 && argc == 3) {
-        remove_alias(list, argv[2]);
+        remove_alias(&list, argv[2]);
 
     } else {
         exibir_uso(argv[0]);
         return 1;
     }
 
-    printf("Salvando lista de aliases\n");
+    // printf("Salvando lista de aliases\n");
     save_alias_list(list);
     return 0;
 }
