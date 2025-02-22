@@ -18,9 +18,14 @@ Alias create_alias(char *name, char *comando){
     return new_alias;
 }
 
-void print_alias(Alias alias){
-    printf("Alias: %s\n", alias.name);
-    print_command(alias.command_head); 
+void print_alias(Alias alias, int command_print) {
+    printf("%s", alias.name);
+    if (command_print) {
+        printf("\n");
+        print_command(alias.command_head);
+        printf("\n");
+    }
+    printf("\n");
 }
 
 void exec_alias_command(Alias alias){
