@@ -69,8 +69,6 @@ void print_command(CommandNode *cmd_node){
         printf("%s", cmd_node->line);
         print_command(cmd_node->next);
     }
-
-    printf("\n");
 }
 
 void free_commandNode(CommandNode *node){
