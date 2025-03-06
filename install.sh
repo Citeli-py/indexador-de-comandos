@@ -3,6 +3,7 @@
 EXECUTABLE="idx"
 SRC_FILE="main.c"
 INSTALL_DIR="/usr/local/bin"
+ALIAS_DIR="$HOME/.idx"
 BASHRC="$HOME/.bashrc"
 
 # Verifica se o código-fonte existe
@@ -25,6 +26,14 @@ if ! grep -q "alias idx=" "$BASHRC"; then
     echo "alias idx=\"$INSTALL_DIR/$EXECUTABLE\"" >> "$BASHRC"
 else
     echo "✅ Alias já existe no $BASHRC."
+fi
+
+# Verifica se o diretório dos alias existe, se não, cria
+if [ ! -d "$ALIAS_DIR" ]; then
+    mkdir -p "$ALIAS_DIR"
+    echo "📂 Diretório dos Alias criado em $ALIAS_DIR!"
+else
+    echo "✅ Diretório dos Alias já existe em $ALIAS_DIR."
 fi
 
 # Recarrega o .bashrc
