@@ -2,8 +2,8 @@
 #include <string.h>
 
 // Exibe o uso do programa
-void exibir_uso(const char *prog) {
-    printf("Uso: %s <comando> [alias] [comando]\n", prog);
+void exibir_uso() {
+    printf("Uso: idx <comando> [alias] [comando]\n");
     printf("Comandos:\n");
     printf("  add <alias> \"<comando>\"       - Adiciona um novo alias\n");
     printf("  list                          - Lista todos os aliases\n");
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]){
     Alias_list *list = load_alias_list();
 
     if(argc < 2){
-        exibir_uso(argv[0]);
+        exibir_uso();
         return 1;
     }
 
@@ -24,6 +24,7 @@ int main(int argc, char *argv[]){
     if (strncmp(argv[1], "add", 3) == 0) {
         Alias alias = create_alias(argv[2], argv[3]);
         list = add_alias(list, alias);
+        save_alias_list(list);
 
     } else if (strncmp(argv[1], "list", 4) == 0) {
         int command_print = 0;
@@ -37,13 +38,12 @@ int main(int argc, char *argv[]){
 
     } else if (strncmp(argv[1], "rm", 2) == 0 && argc == 3) {
         remove_alias(&list, argv[2]);
+        save_alias_list(list);
 
     } else {
         exibir_uso(argv[0]);
         return 1;
     }
-
-    // printf("Salvando lista de aliases\n");
-    save_alias_list(list);
+    
     return 0;
 }
