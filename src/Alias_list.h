@@ -1,10 +1,31 @@
 #include "Alias.h"
+#include <stdlib.h>  // Para getenv
+#include <string.h>  // Para strcat e strcpy
 
-#define ALIAS_FILE "aliases.bin"
+#define ALIAS_FILE "/.idx/aliases.bin"
 
 #define SUCESSO 1
 #define ERRO 0
 
+
+char* get_alias_path(){
+    const char *home_dir = getenv("HOME");
+    if (!home_dir) {
+        perror("Erro ao obter o diretório home");
+        return NULL;
+    }
+
+    char *path = (char *)malloc(strlen(home_dir) + strlen(ALIAS_FILE) + 1);
+    if (!path) {
+        perror("Erro ao alocar memória");
+        return NULL;
+    }
+
+    // Função vulneravel!!!
+    strcpy(path, home_dir);
+    strcat(path, ALIAS_FILE);
+    return path;
+}
 
 struct Alias_list_struct {
     Alias alias;
@@ -19,12 +40,17 @@ Alias_list* create_alias_list(){
     return NULL;
 }
 
-
 /*
     Salva alias em um arquivo binário
 */
 int save_alias_list(Alias_list *alias_list) {
-    FILE *file = fopen(ALIAS_FILE, "wb");
+
+    char *alias_file_path = get_alias_path();
+    if (!alias_file_path) {
+        return ERRO;
+    }
+
+    FILE *file = fopen(alias_file_path, "wb");
     if (!file) {
         perror("Erro ao abrir arquivo para escrita");
         return ERRO;
@@ -42,9 +68,15 @@ int save_alias_list(Alias_list *alias_list) {
 
 
 Alias_list* load_alias_list() {
-    FILE *file = fopen(ALIAS_FILE, "rb");
+
+    char *alias_file_path = get_alias_path();
+    if (!alias_file_path) {
+        return ERRO;
+    }
+
+    FILE *file = fopen(alias_file_path, "rb");
     if (!file) {
-        perror("Erro ao abrir arquivo para leitura");
+        //perror("Erro ao abrir arquivo para leitura");
         return NULL;
     }
 
